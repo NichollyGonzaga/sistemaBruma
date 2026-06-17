@@ -9,12 +9,6 @@
         exit();
     }
 
-    // Verifica se o usuário escolheu um horário na etapa anterior.
-    if(empty($_POST['horario'])){
-    header("Location: servicos.php");
-    exit();
-    }
-
     // Incluindo o autoload do DOM PDF
     require_once '../ASSETS/dompdf/autoload.inc.php';
     require_once("conexao.php");
@@ -59,15 +53,6 @@
             $dataBanco,
             $horaBanco) =
             explode('|', $horarioSelecionado);
-        
-                $dataHoraAgendamento = strtotime(
-            $dataBanco . ' ' . $horaBanco
-        );
-
-        if(($dataHoraAgendamento - time()) < 86400){
-            header("Location: servicos.php?erro=antecedencia");
-            exit();
-    }
     }
 
     //Converte dia da semana
@@ -341,7 +326,22 @@
                         <input type="hidden" name="profissional_nome" id="profissionalNomeInput">
                         <input type="hidden" name="horario" value="<?= $horarioSelecionado ?>">
 
-                        <button type="submit" class="btn confirmar-btn">Gerar boleto</button>
+                        <div class="d-flex flex-column gap-2">
+                            <button type="submit" name="forma_pagamento" value="boleto" class="btn confirmar-btn">
+                                Gerar boleto
+                            </button>
+                            
+                            <button
+                                type="submit"
+                                name="forma_pagamento"
+                                value="pix"
+                                class="btn btn-outline-sucess btn-sm"
+                                onclick="return confirm('Confirmar pagamento PIX simulado?);"
+                            >
+                                <i class="bi bi-check-circle"></i>
+                                Confirmar pagamento PIX
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>
